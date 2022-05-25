@@ -5,43 +5,45 @@ using namespace std;
 Admin::Admin(){
 
 	this->numAdmin= 0;
-	this->nombre = new char[];
-	this->nombre[0] = '\0';
-	this->contrasena = new char[];
-	this->contrasena[0] = '\0';
+	this->nombre = NULL;
+	this->contrasena = NULL;
 	//Constructor por defecto
 }
-/*
-Admin::Admin(const char* nombre,const char* contrasena, int numAdmin){
-	//Cnstructor espec�fico
+Admin::Admin(const char* nombre, const char* contrasena, int numAdmin){
+	this->nombre= new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
+	this->contrasena= new char[strlen(contrasena)+1];
+	strcpy(this->contrasena, contrasena);
+	this->numAdmin= numAdmin;
 }
-Admin::Admin(const Admin&){
-	//Constructor copia
+
+Admin::~Admin(){
+	delete []this->nombre;
+	delete []this->contrasena;
 }
-Admin::~Admin(){ //Destructor
+
+void Admin::setNombre(const char* nombre){
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
 }
 char* Admin::getNombre() const{
-
+	return this->nombre;
 }
-void Admin::setNombre(const char*){
 
+void Admin::setcontrasena(const char* contrasena){
+	this->contrasena = new char[strlen(contrasena)+1];
+	strcpy(this->contrasena, contrasena);
 }
-char Admin::getContrasena() const{
+char* Admin::getcontrasena() const{
+	return this->contrasena;
+}
 
+void Admin::setnumAdmin(int numAdmin){
+	this->numAdmin=numAdmin;
 }
-void Admin::setContrasena(char){
-
+int Admin::getnumAdmin() const{
+	return this->numAdmin = numAdmin;
 }
-int Admin::getNumAdmin(){
-
+void Admin::imprimirInfo(){
+	cout<<"Nombre: "<<this->nombre<<endl;
 }
-void Admin::setNumAdmin(int){
-
-}
-void Admin::toString(){
-
-}
-void Admin::cargarAdministradores(){
-
-}
-*/

@@ -8,18 +8,15 @@ private:
 	int numAdmin;
 
 public:
-	Admin(); //Constructor por defecto
-	Admin(const char*, int); //Cnstructor espec�fico
-	Admin(const Admin&); //Constructor copia
-	~Admin(); //Destructor
+	Admin(const char* nombre, const char* contrasena, int numAdmin);
+	~Admin();
+	void setNombre(const char* nombre);
 	char* getNombre() const;
-	void setNombre(const char*);
-	char getContrasena() const;
-	void setContrasena(char);
-	int getNumAdmin();
-	void setNumAdmin(int);
-	void toString();
-	void cargarAdministradores();
+	void setcontrasena(const char* contrasena);
+	char* getcontrasena() const;
+	void setnumAdmin(int numAdmin);
+	int getnumAdmin() const;
+	void imprimirInfo();
 };
 
 
