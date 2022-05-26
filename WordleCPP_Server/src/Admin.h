@@ -8,6 +8,7 @@ private:
 	int numAdmin;
 
 public:
+	Admin();
 	Admin(const char* nombre, const char* contrasena, int numAdmin);
 	~Admin();
 	void setNombre(const char* nombre);

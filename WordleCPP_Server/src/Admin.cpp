@@ -42,7 +42,7 @@ void Admin::setnumAdmin(int numAdmin){
 	this->numAdmin=numAdmin;
 }
 int Admin::getnumAdmin() const{
-	return this->numAdmin = numAdmin;
+	return this->numAdmin;
 }
 void Admin::imprimirInfo(){
 	cout<<"Nombre: "<<this->nombre<<endl;
