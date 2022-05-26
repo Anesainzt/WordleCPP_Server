@@ -81,9 +81,12 @@ int main(int argc, char *argv[]) {
 	int fin = 0;
 	do {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
+
 		int opcion;
-		char nom[20], con[20];
-		int resul;
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20];
+		int resul,resulRegistro;
+		cout<<resul<< endl;
+
 		do {
 			recv(comm_socket, recvBuff, sizeof(recvBuff), 0);
 			sscanf(recvBuff, "%d", &opcion);
@@ -94,7 +97,7 @@ int main(int argc, char *argv[]) {
 				sprintf(nom, "%s", recvBuff);
 				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contraseï¿½a
 				sprintf(con, "%s", recvBuff);
-				//La buscï¿½is en la BBDD
+				//La busca en la BBDD
 				if (strcmp(nom, "ADMIN") == 0 && strcmp(con, "ADMIN") == 0) {
 					resul = 1;
 				} else if (strcmp(nom, USUARIO) == 0 && strcmp(con, CLAVE) == 0) {
@@ -103,9 +106,20 @@ int main(int argc, char *argv[]) {
 					resul = 0;
 				}
 				sprintf(sendBuff, "%d", resul);
-				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envï¿½a al cliente 1,2,0
+				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
 				break;
-			case 2:break;
+			case 2:
+				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe el Usuario nuevo
+				sprintf(usuarioNuevo, "%s", recvBuff);
+				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contrasenia nueva
+				sprintf(contraseniaNueva, "%s", recvBuff);
+				//Lo añade en la BBDD
+
+
+
+				sprintf(sendBuff, "%d", resulRegistro);
+				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 0 o 1
+				break;
 			case 0:
 				fin = 1;
 				cout << "FIN DE LA CONEXION";
