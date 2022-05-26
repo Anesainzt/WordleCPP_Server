@@ -120,12 +120,12 @@ int main(int argc, char *argv[]) {
 				sprintf(sendBuff, "%d", resulRegistro);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 0 o 1
 				break;
-			case 0:
+			case 3:
 				fin = 1;
 				cout << "FIN DE LA CONEXION";
 				break;
 			}
-		} while (opcion != '0');
+		} while (opcion == 3);
 
 		/*ACABA EL PROGRAMA DEL SERVIDOR*/
 
