@@ -4,6 +4,8 @@
 #include <winsock2.h>
 #include "sqlite3.h"
 #include "BaseDatos.h"
+#include "wordC.h"
+#include "stdlib.h"
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 
@@ -106,9 +108,9 @@ int main(int argc, char *argv[]) {
 				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contrase�a
 				sprintf(con, "%s", recvBuff);
 				//La busca en la BBDD
-				if (strcmp(nom, "ADMIN") == 0 && strcmp(con, "ADMIN") == 0) {
+				if (esAdministrador(nom,con)) {
 					resul = 1;
-				} else if (strcmp(nom, USUARIO) == 0 && strcmp(con, CLAVE) == 0) {
+				} else if (strcmp(nom, USUARIO) == 0 && strcmp(con, CLAVE) == 0) { //Comrpobar BBDD de
 					resul = 2;
 				} else {
 					resul = 0;
