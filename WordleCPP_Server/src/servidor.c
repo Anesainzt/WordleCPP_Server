@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 	// Closing the listening sockets (is not going to be used anymore)
 	closesocket(conn_socket);
 
-	printf("Servidor iniciado\n");
+	printf("Servidor iniciadoo\n");
 	fflush(stdout);
 
 	int fin = 0;
@@ -90,7 +90,6 @@ int main(int argc, char *argv[]) {
 			fflush(stdin);
 		}
 		crearTablas(db);
-	do {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion;
@@ -98,6 +97,7 @@ int main(int argc, char *argv[]) {
 		int resul,resulRegistro;
 
 		do {
+			fflush(stdout);
 			recv(comm_socket, recvBuff, sizeof(recvBuff), 0);
 			sscanf(recvBuff, "%d", &opcion);
 			switch (opcion) {
@@ -117,7 +117,10 @@ int main(int argc, char *argv[]) {
 				}
 				sprintf(sendBuff, "%d", resul);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+				printf("Sale break");
+				fflush(stdout);
 				break;
+
 			case 2:
 				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe el Usuario nuevo
 				sprintf(usuarioNuevo, "%s", recvBuff);
@@ -140,7 +143,6 @@ int main(int argc, char *argv[]) {
 
 		/*ACABA EL PROGRAMA DEL SERVIDOR*/
 
-	} while (fin == 0);
 
 	// CLOSING the sockets and cleaning Winsock...
 	closesocket(comm_socket);
