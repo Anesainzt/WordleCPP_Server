@@ -78,10 +78,9 @@ int main(int argc, char *argv[]) {
 	// Closing the listening sockets (is not going to be used anymore)
 	closesocket(conn_socket);
 
-	printf("Servidor iniciadoo\n");
+	printf("Servidor iniciado\n");
 	fflush(stdout);
 
-	int fin = 0;
 	sqlite3 *db;
 	int result = sqlite3_open("bd.db",&db);
 		if (result != SQLITE_OK)
@@ -90,11 +89,17 @@ int main(int argc, char *argv[]) {
 			fflush(stdin);
 		}
 		crearTablas(db);
+		/*char palabra[6];
+		printf(palabraAleatoria(db,"todas"));
+		fflush(stdout);
+		strcat(palabra,palabraAleatoria(db,"todas"));
+		printf(palabra);
+		fflush(stdout);*/
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion;
 		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20];
-		int resul,resulRegistro;
+		int resul,resulRegistro,resulExiste;
 
 		do {
 			fflush(stdout);
@@ -110,7 +115,7 @@ int main(int argc, char *argv[]) {
 				//La busca en la BBDD
 				if (esAdministrador(nom,con)) {
 					resul = 1;
-				} else if (strcmp(nom, USUARIO) == 0 && strcmp(con, CLAVE) == 0) { //Comrpobar BBDD de
+				} else if (comprobarUsuarios(db, nom, con)) { //Comrpobar BBDD
 					resul = 2;
 				} else {
 					resul = 0;
@@ -127,14 +132,17 @@ int main(int argc, char *argv[]) {
 				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contrasenia nueva
 				sprintf(contraseniaNueva, "%s", recvBuff);
 				//Lo a�ade en la BBDD
-
-
+				if(comprobarUsuarios(db, usuarioNuevo, contraseniaNueva) == 3){
+					resulRegistro = 0;
+				}else{
+					insertarUsuario(db,usuarioNuevo,contraseniaNueva);
+					resulRegistro = 1;
+				}
 
 				sprintf(sendBuff, "%d", resulRegistro);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 0 o 1
 				break;
 			case 3:
-				fin = 1;
 				printf("Fin de la conexion\n");
 				fflush(stdout);
 				break;

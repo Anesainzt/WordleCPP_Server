@@ -33,6 +33,17 @@ void insertarPuntuacion(sqlite3 *db ,char *nombre,char * palabra, int intentos){
 	sqlite3_finalize(stmt);
 }
 
+void insertarUsuario(sqlite3 *db ,char *nombre,char * contra){
+	sqlite3_stmt *stmt;
+
+	char sql[100];
+
+	sprintf(sql, "insert into usuario values('%s', '%s')",nombre,contra);
+	sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
+	sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+}
+
 void borrarUsuario(sqlite3 *db, char *nombre){
 	sqlite3_stmt *stmt;
 	char sql[100];
@@ -73,16 +84,13 @@ int comprobarUsuarios(sqlite3 *db, char*nombre, char *contra){
 	if(resul == SQLITE_ROW){
 		strcpy(con, (char*)sqlite3_column_text(stmt, 1));
 		if(strcmp(contra,con)==0){// usuario correcto en BD
-			resultado = 2;
+			resultado = 1;
 		}else{
-			resultado = 1;    // usuario incorrecto en BD
+			resultado = 0;    // usuario incorrecto en BD
 		}
 	}else{
-		resultado= 3;  // No existe en la BD, tenemos que mirar en el txt a ver si es administrador
-
+		resultado = 3;
 	}
-
-
 	sqlite3_finalize(stmt);
 	return resultado;
 }
@@ -107,6 +115,34 @@ void mostrarPuntuaciones(sqlite3 * db,  char * nombre){
 
 
     sqlite3_finalize(stmt);
+
+}
+
+char *  palabraAleatoria(sqlite3 * db,char * tematica){
+	char palabra[6];
+	sqlite3_stmt *stmt;
+	char sql[100];
+	int resul;
+
+	if(strcmp(tematica,"todas") == 0){
+		sprintf(sql,"select * from palabra order by random() limit 1");
+		sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
+		do{
+		   resul = sqlite3_step(stmt);
+		  strcpy(palabra, (char*)sqlite3_column_text(stmt, 0));
+			sqlite3_finalize(stmt);
+			return palabra;
+		    }while(resul == SQLITE_ROW);
+	}else{
+		sprintf(sql,"select * from palabra where tematica = '%s' order by random() limit 1",tematica);
+		sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
+		do{
+		   resul = sqlite3_step(stmt);
+		   strcpy(palabra, (char*)sqlite3_column_text(stmt, 0));
+	}while(resul == SQLITE_ROW);
+		sqlite3_finalize(stmt);
+		return palabra;
+	}
 
 }
 
