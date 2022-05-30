@@ -98,8 +98,8 @@ int main(int argc, char *argv[]) {
 		fflush(stdout);*/
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
-		int opcion, opcionAdmin;
-		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20];
+		int opcion, opcionAdmin, opcionJugador;
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20], palabraJuego[6], tematicaJuego[20];
 		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
 
 		do {
@@ -125,12 +125,12 @@ int main(int argc, char *argv[]) {
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
 
 
-				if(resul = 1){
+				if(resul == 1){
 					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
 					sscanf(recvBuff,"%d",&opcionAdmin);
 					printf("%d",opcionAdmin);
 					fflush(stdout);
-					if(opcionAdmin = 1){
+					if(opcionAdmin == 1){
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
 						sprintf(palabra, "%s", recvBuff);
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
 						resultInsertarPalabra = 0;
 						sprintf(sendBuff, "%d", resultInsertarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
-					}else if(opcionAdmin = 2){
+					}else if(opcionAdmin == 2){
 						//FALLA
 						printf("1");
 						fflush(stdout);
@@ -161,6 +161,17 @@ int main(int argc, char *argv[]) {
 						resultBorrarPalabra = 0;
 						sprintf(sendBuff, "%d", resultBorrarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+					}else{
+						break;
+					}
+				}else if(resul == 2){
+					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
+					sscanf(recvBuff,"%d",&opcionAdmin);
+					if(opcionJugador == 1){
+						recv(comm_socket, recvBuff, sizeof(recvBuff), 0);
+						palabraJuego = palabraAleatoria(db, tematicaJuego);
+						sprintf(sendBuff, "%d", palabraJuego);
+						send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 					}else{
 						break;
 					}
