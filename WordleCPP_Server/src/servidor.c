@@ -6,6 +6,7 @@
 #include "BaseDatos.h"
 #include "wordC.h"
 #include "stdlib.h"
+#include "Logger.h"
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 
@@ -85,8 +86,7 @@ int main(int argc, char *argv[]) {
 	int result = sqlite3_open("bd.db",&db);
 		if (result != SQLITE_OK)
 		{
-			printf("Error al abrir la base de datos\n");
-			fflush(stdin);
+			errorBD(" AL INICIAR LA BBDD");
 		}
 		crearTablas(db);
 		/*char palabra[6];
@@ -98,8 +98,8 @@ int main(int argc, char *argv[]) {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion;
-		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20];
-		int resul,resulRegistro,resulExiste;
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20];
+		int resul,resulRegistro, resultInsertarPalabra;
 
 		do {
 			fflush(stdout);
@@ -110,18 +110,29 @@ int main(int argc, char *argv[]) {
 
 				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe el nombre
 				sprintf(nom, "%s", recvBuff);
-				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contrase�a
+				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contrasena
 				sprintf(con, "%s", recvBuff);
-				//La busca en la BBDD
+				//La busca en el fichero
 				if (esAdministrador(nom,con)) {
 					resul = 1;
-				} else if (comprobarUsuarios(db, nom, con)) { //Comrpobar BBDD
+				} else if (comprobarUsuarios(db, nom, con)) { //Comprobar BBDD
 					resul = 2;
 				} else {
 					resul = 0;
 				}
 				sprintf(sendBuff, "%d", resul);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+				if(resul = 1){
+					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
+					sprintf(palabra, "%s", recvBuff);
+					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
+					sprintf(tematica, "%s", recvBuff);
+					insertarPalabra(db, palabra, tematica);
+					resultInsertarPalabra = 0;
+					sprintf(sendBuff, "%d", resultInsertarPalabra);
+					send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+				}
+
 				printf("Sale break");
 				fflush(stdout);
 				break;

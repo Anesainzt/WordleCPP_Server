@@ -89,7 +89,7 @@ int comprobarUsuarios(sqlite3 *db, char*nombre, char *contra){
 			resultado = 0;    // usuario incorrecto en BD
 		}
 	}else{
-		resultado = 3;
+		resultado =3;
 	}
 	sqlite3_finalize(stmt);
 	return resultado;
@@ -143,7 +143,17 @@ char *  palabraAleatoria(sqlite3 * db,char * tematica){
 		sqlite3_finalize(stmt);
 		return palabra;
 	}
+}
 
+void insertarPalabra(sqlite3 *db ,char *palabra,char * tematica){
+	sqlite3_stmt *stmt;
+
+	char sql[100];
+
+	sprintf(sql, "insert into palabra values('%s', '%s')",palabra,tematica);
+	sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
+	sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
 }
 
 

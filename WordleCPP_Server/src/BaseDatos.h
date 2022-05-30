@@ -14,5 +14,6 @@ int comprobarUsuarios(sqlite3 *db, char*nombre, char *contra);
 void mostrarPuntuaciones(sqlite3 * db,  char * nombre);
 char * palabraAleatoria(sqlite3 * db,char * tematica);
 void insertarUsuario(sqlite3 *db ,char *nombre,char * contra);
+void insertarPalabra(sqlite3 *db ,char *palabra,char * tematica);
 
 #endif /* BASEDATOS_H_ */
