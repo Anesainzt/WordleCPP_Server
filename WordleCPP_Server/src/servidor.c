@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 
 		int opcion, opcionAdmin;
 		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20];
-		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
+		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra, resultAgur;
 
 		do {
 			fflush(stdout);
@@ -147,8 +147,7 @@ int main(int argc, char *argv[]) {
 						sprintf(sendBuff, "%d", resultBorrarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
 					}else{
-						printf("SE HE METIDO EN EL 3");
-						fflush(stdout);
+						break;
 					}
 				}
 
@@ -161,8 +160,8 @@ int main(int argc, char *argv[]) {
 				sprintf(usuarioNuevo, "%s", recvBuff);
 				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la contrasenia nueva
 				sprintf(contraseniaNueva, "%s", recvBuff);
-				//Lo a�ade en la BBDD
-				if(comprobarUsuarios(db, usuarioNuevo, contraseniaNueva) == 3){
+
+				if(comprobarUsuarios(db, usuarioNuevo, contraseniaNueva) == 1){
 					resulRegistro = 0;
 				}else{
 					insertarUsuario(db,usuarioNuevo,contraseniaNueva);
