@@ -73,20 +73,20 @@ int main(int argc, char *argv[]) {
 		WSACleanup();
 		return -1;
 	}
-	printf("Incomming connection from: %s (%d)\n", inet_ntoa(client.sin_addr),
-			ntohs(client.sin_port));
+	printf("Incomming connection from: %s (%d)\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
 
+	inicializarLog("LoggerFichero.txt", FICHERO);
+	inicializarLog("LoggerConsola.txt", CONSOLA);
+	logEnFichero("Esto no es un error, se ha establecido la conexion");
+	logEnConsola("Servidor iniciado\n");
 	// Closing the listening sockets (is not going to be used anymore)
 	closesocket(conn_socket);
-
-	printf("Servidor iniciado\n");
-	fflush(stdout);
 
 	sqlite3 *db;
 	int result = sqlite3_open("bd.db",&db);
 		if (result != SQLITE_OK)
 		{
-			errorBD(" AL INICIAR LA BBDD");
+			error("ERROR", "ERROR AL INICIAR LA BBDD");
 		}
 		crearTablas(db);
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 
 		int opcion, opcionAdmin;
 		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20];
-		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra, resultAgur;
+		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
 
 		do {
 			fflush(stdout);
@@ -128,6 +128,8 @@ int main(int argc, char *argv[]) {
 				if(resul = 1){
 					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
 					sscanf(recvBuff,"%d",&opcionAdmin);
+					printf("%d",opcionAdmin);
+					fflush(stdout);
 					if(opcionAdmin = 1){
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
 						sprintf(palabra, "%s", recvBuff);
@@ -138,11 +140,24 @@ int main(int argc, char *argv[]) {
 						sprintf(sendBuff, "%d", resultInsertarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
 					}else if(opcionAdmin = 2){
+						//FALLA
+						printf("1");
+						fflush(stdout);
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
+						printf("2ANTESSSSS");
+						fflush(stdout);
 						sprintf(borrarPalabra, "%s", recvBuff);
+						printf("3ANTESSSSS");
+						fflush(stdout);
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
+						printf("4ANTESSSSS");
+						fflush(stdout);
 						sprintf(borrarTematica, "%s", recvBuff);
+						printf("5ANTES");
+						fflush(stdout);
 						borrarPalabras(db, borrarPalabra);
+						printf("6DESPUES");
+						fflush(stdout);
 						resultBorrarPalabra = 0;
 						sprintf(sendBuff, "%d", resultBorrarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
