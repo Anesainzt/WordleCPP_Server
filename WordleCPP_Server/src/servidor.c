@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 		fflush(stdout);*/
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
-		int opcion;
+		int opcion, opcionAdmin;
 		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20];
 		int resul,resulRegistro, resultInsertarPalabra;
 
@@ -122,15 +122,21 @@ int main(int argc, char *argv[]) {
 				}
 				sprintf(sendBuff, "%d", resul);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+
+
 				if(resul = 1){
-					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
-					sprintf(palabra, "%s", recvBuff);
-					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
-					sprintf(tematica, "%s", recvBuff);
-					insertarPalabra(db, palabra, tematica);
-					resultInsertarPalabra = 0;
-					sprintf(sendBuff, "%d", resultInsertarPalabra);
-					send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
+					sprintf(opcionAdmin, "%d", recvBuff);
+					if(opcionAdmin = '1'){
+						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
+						sprintf(palabra, "%s", recvBuff);
+						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
+						sprintf(tematica, "%s", recvBuff);
+						insertarPalabra(db, palabra, tematica);
+						resultInsertarPalabra = 0;
+						sprintf(sendBuff, "%d", resultInsertarPalabra);
+						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+					}
 				}
 
 				printf("Sale break");
