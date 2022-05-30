@@ -42,19 +42,12 @@ typedef struct {
 	int numeroAdministadores;
 }eAdministradores;
 
-int menuInicio();
-void menuUsuario(sqlite3 * db);
-void menuAdministrador();
-//int menuAdministrador();
-void menuRegistro(sqlite3 *db);
+
 int numeroDePalabrasEnFichero(char * fichero);
 void jugarWordle(sqlite3 * db);
 bool procesarPalabra(const char* laRespuesta, const char* elIntento);
-void aniadirPalabraFichero();
-int logIn();
 int esAdministrador(char * usuario, char * contra);
 void mostrarPalabradeUnaPosicion();
-void eliminarPalabraDeUnaPosicion();
 
 
 #endif /* WORDC_H_ */

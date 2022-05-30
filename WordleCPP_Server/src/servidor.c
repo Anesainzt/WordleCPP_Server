@@ -7,6 +7,7 @@
 #include "wordC.h"
 #include "stdlib.h"
 #include "Logger.h"
+
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 
@@ -98,7 +99,7 @@ int main(int argc, char *argv[]) {
 		fflush(stdout);*/
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
-		int opcion, opcionAdmin, opcionJugador;
+		int opcion, opcionAdmin;
 		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20], tematicaJuego[20];
 		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
 
@@ -164,50 +165,45 @@ int main(int argc, char *argv[]) {
 					}else{
 						break;
 					}
-				}else {
-					break;
 				}
 				if(resul == 2){
-					int tematicaNumero;
-					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
-					sscanf(recvBuff,"%d",&opcionAdmin);
-					if(opcionJugador == 1){
-						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
-						sscanf(recvBuff,"%d",&tematicaNumero);
-						switch(tematicaNumero){
-						case 1:
-							strcpy(tematicaJuego,"verbo");
-							break;
-						case 2:
-							strcpy(tematicaJuego,"objeto");
-							break;
-						case 3:
-							strcpy(tematicaJuego,"cuerpo");
-							break;
-						case 4:
-							strcpy(tematicaJuego,"animal");
-							break;
-						case 5:
-							strcpy(tematicaJuego,"lugar");
-							break;
-						case 6:
-							strcpy(tematicaJuego,"todas");
-							break;
-						}
-						printf("No fallo todo ok\n");
-						fflush(stdout);
-						char *palabraJuego;
-						palabraJuego = palabraAleatoria(db, tematicaJuego);
-						printf("No fallo todo ok");
-						fflush(stdout);
-						sprintf(sendBuff, "%s", palabraJuego);
-						send(comm_socket, sendBuff, sizeof(sendBuff), 0);
-
-
-					}else{
+					/*int tematicaNumero;
+					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
+					sscanf(recvBuff,"%d",&tematicaNumero);
+					switch(tematicaNumero){
+					case 1:
+						strcpy(tematicaJuego,"verbo");
+						break;
+					case 2:
+						strcpy(tematicaJuego,"objeto");
+						break;
+					case 3:
+						strcpy(tematicaJuego,"cuerpo");
+						break;
+					case 4:
+						strcpy(tematicaJuego,"animal");
+						break;
+					case 5:
+						strcpy(tematicaJuego,"lugar");
+						break;
+					case 6:
+						strcpy(tematicaJuego,"todas");
 						break;
 					}
+					printf("No fallo todo ok\n");
+					fflush(stdout);
+					char *palabraJuego;
+					palabraJuego = palabraAleatoria(db, tematicaJuego);
+					printf("No fallo todo ok");
+					fflush(stdout);
+					sprintf(sendBuff, "%s", palabraJuego);
+					send(comm_socket, sendBuff, sizeof(sendBuff), 0);
+				*/
+					jugarWordle(db);
+				}else{
+					break;
 				}
+
 
 				printf("Sale break");
 				fflush(stdout);

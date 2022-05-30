@@ -128,14 +128,14 @@ void mostrarPuntuaciones(sqlite3 * db,  char * nombre){
 
 }
 
-char *  palabraAleatoria(sqlite3 * db,char * tematica){
-	char palabra[6];
+char palabraAleatoria(sqlite3 * db,char * tematica){
+	char *palabra = "libro";
 	sqlite3_stmt *stmt;
 	char sql[100];
 	int resul;
 
 	if(strcmp(tematica,"todas") == 0){
-		sprintf(sql,"select * from palabra order by random() limit 1");
+		sprintf(sql,"select * from palabra order by rand() limit 1");
 		sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
 		do{
 		   resul = sqlite3_step(stmt);
@@ -144,12 +144,19 @@ char *  palabraAleatoria(sqlite3 * db,char * tematica){
 			return palabra;
 		    }while(resul == SQLITE_ROW);
 	}else{
-		sprintf(sql,"select * from palabra where tematica = '%s' order by random() limit 1",tematica);
+		sprintf(sql,"select * from palabra where tematica = '%s' order by rand() limit 1",tematica);
 		sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
 		do{
 		   resul = sqlite3_step(stmt);
+		   printf("HOLA2");
+		   fflush(stdout);
+		   palabra[0] = '0';
 		   strcpy(palabra, (char*)sqlite3_column_text(stmt, 0));
+		   printf("HOLA4");
+		   fflush(stdout);
 	}while(resul == SQLITE_ROW);
+		printf("HOLA3");
+		fflush(stdout);
 		sqlite3_finalize(stmt);
 		return palabra;
 	}
