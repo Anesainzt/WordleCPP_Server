@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion, opcionAdmin, opcionJugador;
-		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20], palabraJuego[6], tematicaJuego[20];
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20], tematicaJuego[20];
 		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
 
 		do {
@@ -128,8 +128,8 @@ int main(int argc, char *argv[]) {
 				if(resul == 1){
 					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
 					sscanf(recvBuff,"%d",&opcionAdmin);
-					printf("%d",opcionAdmin);
-					fflush(stdout);
+					/*printf("%d",opcionAdmin);
+					fflush(stdout);*/
 					if(opcionAdmin == 1){
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
 						sprintf(palabra, "%s", recvBuff);
@@ -164,14 +164,46 @@ int main(int argc, char *argv[]) {
 					}else{
 						break;
 					}
-				}else if(resul == 2){
+				}else {
+					break;
+				}
+				if(resul == 2){
+					int tematicaNumero;
 					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
 					sscanf(recvBuff,"%d",&opcionAdmin);
 					if(opcionJugador == 1){
-						recv(comm_socket, recvBuff, sizeof(recvBuff), 0);
+						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
+						sscanf(recvBuff,"%d",&tematicaNumero);
+						switch(tematicaNumero){
+						case 1:
+							strcpy(tematicaJuego,"verbo");
+							break;
+						case 2:
+							strcpy(tematicaJuego,"objeto");
+							break;
+						case 3:
+							strcpy(tematicaJuego,"cuerpo");
+							break;
+						case 4:
+							strcpy(tematicaJuego,"animal");
+							break;
+						case 5:
+							strcpy(tematicaJuego,"lugar");
+							break;
+						case 6:
+							strcpy(tematicaJuego,"todas");
+							break;
+						}
+						printf("No fallo todo ok\n");
+						fflush(stdout);
+						char *palabraJuego;
 						palabraJuego = palabraAleatoria(db, tematicaJuego);
-						sprintf(sendBuff, "%d", palabraJuego);
+						printf("No fallo todo ok");
+						fflush(stdout);
+						sprintf(sendBuff, "%s", palabraJuego);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0);
+
+
 					}else{
 						break;
 					}
