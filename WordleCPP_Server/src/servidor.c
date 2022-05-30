@@ -98,8 +98,8 @@ int main(int argc, char *argv[]) {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion, opcionAdmin;
-		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20];
-		int resul,resulRegistro, resultInsertarPalabra;
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], palabraBorrar[6];
+		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
 
 		do {
 			fflush(stdout);
@@ -126,8 +126,8 @@ int main(int argc, char *argv[]) {
 
 				if(resul = 1){
 					recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la opcion
-					sprintf(opcionAdmin, "%d", recvBuff);
-					if(opcionAdmin = '1'){
+					sscanf(recvBuff,"%d",&opcionAdmin);
+					if(opcionAdmin = 1){
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
 						sprintf(palabra, "%s", recvBuff);
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
@@ -136,6 +136,14 @@ int main(int argc, char *argv[]) {
 						resultInsertarPalabra = 0;
 						sprintf(sendBuff, "%d", resultInsertarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+					}else if(opcionAdmin = 2){
+						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
+						sprintf(palabraBorrar, "%s", recvBuff);
+						borrarPalabra(db, palabraBorrar);
+						resultBorrarPalabra = 0;
+						sprintf(sendBuff, "%d", resultBorrarPalabra);
+						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
+					}else if(opcionAdmin = 3){
 					}
 				}
 

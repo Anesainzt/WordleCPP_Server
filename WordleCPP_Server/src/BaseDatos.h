@@ -9,6 +9,7 @@ void crearTablas(sqlite3 *db);
 void insertarUsuario(sqlite3 *db, char *nombre, char *contrasenia);
 void insertarPuntuacion(sqlite3 *db ,char *nombre,char * palabra, int intentos);
 void borrarUsuario(sqlite3 *db, char *nombre);
+void borrarPalabra(sqlite3 *db, char *palabra);
 void mostrarUsuarios(sqlite3 *db);
 int comprobarUsuarios(sqlite3 *db, char*nombre, char *contra);
 void mostrarPuntuaciones(sqlite3 * db,  char * nombre);

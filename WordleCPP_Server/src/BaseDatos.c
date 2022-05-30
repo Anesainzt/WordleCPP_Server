@@ -53,6 +53,15 @@ void borrarUsuario(sqlite3 *db, char *nombre){
 	sqlite3_finalize(stmt);
 }
 
+void borrarPalabra(sqlite3 *db, char *palabra){
+	sqlite3_stmt *stmt;
+	char sql[100];
+	sprintf(sql, "delete from palabra where palabra = '%s'",palabra);
+	sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
+	sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+}
+
 void mostrarUsuarios(sqlite3 *db){
 	int resul;
 	sqlite3_stmt *stmt;
