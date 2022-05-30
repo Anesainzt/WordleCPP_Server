@@ -89,6 +89,7 @@ int main(int argc, char *argv[]) {
 			errorBD(" AL INICIAR LA BBDD");
 		}
 		crearTablas(db);
+
 		/*char palabra[6];
 		printf(palabraAleatoria(db,"todas"));
 		fflush(stdout);
@@ -98,7 +99,7 @@ int main(int argc, char *argv[]) {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion, opcionAdmin;
-		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], palabraBorrar[6];
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20];
 		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
 
 		do {
@@ -138,12 +139,16 @@ int main(int argc, char *argv[]) {
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
 					}else if(opcionAdmin = 2){
 						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la palabra
-						sprintf(palabraBorrar, "%s", recvBuff);
-						borrarPalabra(db, palabraBorrar);
+						sprintf(borrarPalabra, "%s", recvBuff);
+						recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe la tematica
+						sprintf(borrarTematica, "%s", recvBuff);
+						borrarPalabras(db, borrarPalabra);
 						resultBorrarPalabra = 0;
 						sprintf(sendBuff, "%d", resultBorrarPalabra);
 						send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 1,2,0
-					}else if(opcionAdmin = 3){
+					}else{
+						printf("SE HE METIDO EN EL 3");
+						fflush(stdout);
 					}
 				}
 

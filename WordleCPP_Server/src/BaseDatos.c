@@ -53,7 +53,7 @@ void borrarUsuario(sqlite3 *db, char *nombre){
 	sqlite3_finalize(stmt);
 }
 
-void borrarPalabra(sqlite3 *db, char *palabra){
+void borrarPalabras(sqlite3 *db, char *palabra){
 	sqlite3_stmt *stmt;
 	char sql[100];
 	sprintf(sql, "delete from palabra where palabra = '%s'",palabra);
@@ -85,14 +85,15 @@ void mostrarUsuarios(sqlite3 *db){
 int comprobarUsuarios(sqlite3 *db, char*nombre, char *contra){
 	int resul;
 	sqlite3_stmt *stmt;
-	char sql[100],/*nom[101] ,*/con[21];
+	char sql[100],/*nom[101] ,*/con[21], nom[20];
 	int resultado = 3;
 	sprintf(sql,"select * from usuario where nom='%s'",nombre);
 	sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
 	resul = sqlite3_step(stmt);
 	if(resul == SQLITE_ROW){
+		strcpy(nom, (char*)sqlite3_column_text(stmt, 0));
 		strcpy(con, (char*)sqlite3_column_text(stmt, 1));
-		if(strcmp(contra,con)==0){// usuario correcto en BD
+		if((strcmp(contra,con)==0) && (strcmp(nombre,nom)==0)){// usuario correcto en BD
 			resultado = 1;
 		}else{
 			resultado = 0;    // usuario incorrecto en BD
