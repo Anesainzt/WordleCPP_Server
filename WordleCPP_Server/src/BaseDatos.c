@@ -105,10 +105,12 @@ int comprobarUsuarios(sqlite3 *db, char*nombre, char *contra){
 	return resultado;
 }
 
-void mostrarPuntuaciones(sqlite3 * db,  char * nombre){
+char mostrarPuntuaciones(sqlite3 * db,  char * nombre){
+
     int resul, intentos;
     sqlite3_stmt * stmt;
     char sql[100],usuario[101] ,palabra[6];
+    char* r=" ";
 
     sprintf(sql,"select * from puntuacion where usuario='%s'", nombre);
     sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
@@ -121,11 +123,19 @@ void mostrarPuntuaciones(sqlite3 * db,  char * nombre){
         strcpy(palabra, (char*)sqlite3_column_text(stmt, 1));
        intentos = sqlite3_column_int(stmt, 2);
         printf("El usuario:%s ha adivinado la palabra: %s en %d intentos\n",usuario, palabra, intentos); fflush(stdout);
+        strcat(r, (char*)sqlite3_column_text(stmt, 0));
+        strcat(r,"-");
+        strcat(r, (char*)sqlite3_column_text(stmt, 1));
+        strcat(r,"-");
+
+        strcat(r, (int*)sqlite3_column_int(stmt, 2));
+
     }while(resul == SQLITE_ROW);
 
 
     sqlite3_finalize(stmt);
 
+    return r;
 }
 
 char palabraAleatoria(sqlite3 * db,char * tematica){

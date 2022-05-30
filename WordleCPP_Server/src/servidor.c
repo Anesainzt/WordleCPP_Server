@@ -7,6 +7,7 @@
 #include "wordC.h"
 #include "stdlib.h"
 #include "Logger.h"
+#include "string.h"
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
@@ -100,8 +101,9 @@ int main(int argc, char *argv[]) {
 		/*EMPIEZA EL PROGRAMA DEL SERVIDOR*/
 
 		int opcion, opcionAdmin;
-		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20], tematicaJuego[20];
+		char nom[20], con[20],usuarioNuevo[51],contraseniaNueva[20], palabra[6], tematica[20], borrarPalabra[6], borrarTematica[20], usuarioPuntuacion[51];
 		int resul,resulRegistro, resultInsertarPalabra, resultBorrarPalabra;
+		char* rPuntuacion;
 
 		do {
 			fflush(stdout);
@@ -225,12 +227,25 @@ int main(int argc, char *argv[]) {
 				sprintf(sendBuff, "%d", resulRegistro);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0); //Le envia al cliente 0 o 1
 				break;
+
 			case 3:
+				printf("Cargando puntuaciones...\n");
+				fflush(stdout);
+				recv(comm_socket, recvBuff, sizeof(recvBuff), 0); //Recibe el Usuario cuya puntuacion se quiere
+				sprintf(usuarioPuntuacion, "%s", recvBuff);
+				printf(usuarioPuntuacion);
+				fflush(stdout);
+				strcpy(rPuntuacion, mostrarPuntuaciones(db, usuarioPuntuacion));
+				sprintf(sendBuff, "%s", rPuntuacion);
+				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
+				break;
+			case 4:
 				printf("Fin de la conexion\n");
 				fflush(stdout);
 				break;
 			}
 		} while (opcion == 3);
+
 
 		/*ACABA EL PROGRAMA DEL SERVIDOR*/
 
